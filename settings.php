@@ -16,9 +16,8 @@ class ATGPBSettings {
    * Output
    */
   public static function settings_page(){
-    if ( ! isset( $_REQUEST['settings-updated'] ) ) $_REQUEST['settings-updated'] = false;
-    $title = 'ATG Plugin Boilerplate Settings';
-    $message = false !== $_REQUEST['settings-updated'] ?  __( 'Settings saved.', 'atgbp'  ) : '';
+    $title = 'Bootstrap Button Shortcode';
+    $message = isset( $_REQUEST['settings-updated'] ) ?  __( 'Settings saved.', 'atgbp'  ) : '';
     ATGPBCommon::page_header($title, $message);
       echo '<form method="post" action="options.php">';
         settings_fields( 'atgbp_settings' );
@@ -35,7 +34,7 @@ class ATGPBSettings {
     // Add the section to atgbp_settings settings so we can add our fields to it
     add_settings_section(
       'atgpb_setting_section',
-      'Example settings section in atgbp_settings',
+      'Default Button Settings',
       array( 'ATGPBSettings', 'atgpb_section_callback'),
       'atgbp_settings'
     );
@@ -66,7 +65,7 @@ class ATGPBSettings {
    * Settings section callback function
    */ 
   public function atgpb_section_callback() {
-    echo '<p>Intro text for our settings section</p>';
+    echo '<p>Use the fields below to set default variables for the button shortcode.</p>';
   }
    
   /*
