@@ -51,30 +51,5 @@ class ATGPBCommon {
     </div> <!-- / wrap -->
   <?php
   }
-
-
-  /**
-   * Outputs the options form header
-   *
-   * @access public
-   * @static
-   */
-  public static function form_header() { ?>
-    <form method="post" action="options.php"> 
-
-  <?php
-  }
-
-  /**
-   * Outputs the options form footer
-   *
-   * @access public
-   * @static
-   */
-  public static function form_footer() { ?>
-      <?php submit_button(); ?>
-    </form> <!-- / form -->
-  <?php
-  }
-
+  
 }

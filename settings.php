@@ -20,10 +20,11 @@ class ATGPBSettings {
     $title = 'ATG Plugin Boilerplate Settings';
     $message = false !== $_REQUEST['settings-updated'] ?  __( 'Settings saved.', 'atgbp'  ) : '';
     ATGPBCommon::page_header($title, $message);
-      ATGPBCommon::form_header();
+      echo '<form method="post" action="options.php">';
         settings_fields( 'atgbp_settings' );
         do_settings_sections( 'atgbp_settings' );
-      ATGPBCommon::form_footer();
+        submit_button();
+      echo '</form>';
     ATGPBCommon::page_footer();
   }
 
