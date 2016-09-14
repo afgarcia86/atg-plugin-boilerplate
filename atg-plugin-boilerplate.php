@@ -47,6 +47,8 @@ if ( ! defined( 'IS_ADMIN' ) ) {
 
 require_once( plugin_dir_path( __FILE__ ) . 'common.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'settings.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'help.php' );
+require_once( plugin_dir_path( __FILE__ ) . 'tinymce-shortcode.php' );
 
 add_action( 'init', array( 'ATGPB', 'init' ) );
 
@@ -77,6 +79,20 @@ class ATGPB {
 
     add_action( 'wp_enqueue_scripts', array( 'ATGPB', 'enqueue_scripts' ) );
     add_action( 'admin_menu', array( 'ATGPB', 'create_menu' ) );
+    add_action( 'admin_init', array( 'ATGPBSettings', 'register_settings_fields' ) );
+    add_shortcode('insert_button', array('ATGPBShortcode', 'insert_button_func'));
+
+    if ( ATGPB::page_supports_insert_button() ) {
+      // /*** Start Wisiwig Button ***/
+      // add_filter('mce_external_plugins', array('ATGPBShortcode', 'enqueue_plugin_scripts'));
+      // add_filter('mce_buttons', array('ATGPBShortcode', 'register_buttons_editor'));
+      // /*** End Wisiwig Button ***/
+
+      /*** Start Media Button ***/
+      add_action( 'media_buttons', array( 'ATGPBShortcode', 'insert_button' ), 20 );
+      add_action( 'admin_print_footer_scripts', array( 'ATGPBShortcode', 'insert_shortcode' ) );
+      /*** End Media Button ***/
+    }
   }
 
   /* Registers ATG Plugin Boilerplate scripts
@@ -112,30 +128,26 @@ class ATGPB {
   }
 
   /**
-   * Creates the "Hello" left nav.
-   *
-   * WordPress generates the page hook suffix and screen ID by passing the translated menu title through sanitize_title().
-   * Screen options and metabox preferences are stored using the screen ID therefore:
-   * 1. The page suffix or screen ID should never be hard-coded. Use get_current_screen()->id.
-   * 2. The page suffix and screen ID must never change.
-   *  e.g. When an update for Gravity Forms is available an icon will be added to the the menu title.
-   *  The HTML for the icon will be stripped entirely by sanitize_title() because the number 1 is encoded.
+   * Creates the "Bootstrap Button" left nav.
    *
    * @access public
    * @static
    *
    */
   public static function create_menu() {
+    $capability = current_user_can( 'manage_options' );
+    $menu_slug = 'atgbp_settings';
+    
+    /*** Add Settings Page ***/
+    // add_options_page( __( 'Bootstrap Button', 'atgbp' ), __( 'Bootstrap Button', 'atgbp' ), $capability, $menu_slug, array( 'ATGPBSettings', 'settings_page' ));
+    /*** End Settigns Page ***/
 
-    $has_full_access = current_user_can( 'manage_options' );
-
+    /*** Add Custom Menu ***/
     $admin_icon = self::get_admin_icon_b64();
-
-    add_menu_page( __( 'Hello', 'atgbp' ), __( 'Hello', 'atgbp' ), current_user_can( 'manage_options' ), 'atgbp_settings',array( 'ATGPBSettings', 'settings_page' ), $admin_icon, 80 );
-
+    add_menu_page( __( 'Bootstrap Button', 'atgbp' ), __( 'Bootstrap Button', 'atgbp' ), $capability, $menu_slug, array( 'ATGPBSettings', 'settings_page' ), $admin_icon, 80 );
     // Adding submenu pages
-    // add_submenu_page( $parent_menu['name'], __( 'Help', 'gravityforms' ), __( 'Help', 'gravityforms' ), $has_full_access ? 'gform_full_access' : $min_cap, 'gf_help', array( 'RGForms', 'help_page' ) );
-
+    add_submenu_page( $menu_slug, __( 'Help', 'atgpb' ), __( 'Help', 'atgpb' ), $capability, 'atgbp_help', array( 'ATGPBHelp', 'help_page' ) );
+    /*** End Custom Menu ***/
   }
 
   /**
@@ -153,6 +165,20 @@ class ATGPB {
     $svg = base64_encode(file_get_contents($base_url.'/images/dashicon.svg'));
     $icon = 'data:image/svg+xml;base64,' . $svg;
     return $icon;
+  }
+
+  /**
+   * Determines if the "Add Form" button should be added to the page.
+   *
+   * @access public
+   * @static
+   *
+   * @return boolean $display_add_form_button True if the page is supported.  False otherwise.
+   */
+  public static function page_supports_insert_button() {
+    $is_post_edit_page = in_array( ATG_CURRENT_PAGE, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php', 'customize.php' ) );
+
+    return $is_post_edit_page;
   }
 
 }

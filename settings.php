@@ -3,12 +3,10 @@ if ( ! class_exists( 'ATGPB' ) ) {
   die();
 }
 
-add_action( 'admin_init', array( 'ATGPBSettings', 'register_settings_fields' ) );
-
 /**
  * Class ATGPBSettings
  *
- * Includes common methods accessed throughout Gravity Forms and add-ons.
+ * Includes common methods accessed throughout ATG Plugin Boilerplate.
  */
 class ATGPBSettings {
 
@@ -41,9 +39,9 @@ class ATGPBSettings {
      
     // Add the field with the names and function to use for our new settings, put it in our new section
     add_settings_field(
-      'atgpb_default_button_label',
+      'atgpb_default_button_text',
       'Default Button Label',
-      array( 'ATGPBSettings', 'atgpb_default_button_label_callback'),
+      array( 'ATGPBSettings', 'atgpb_default_button_text_callback'),
       'atgbp_settings',
       'atgpb_setting_section'
     );
@@ -57,8 +55,8 @@ class ATGPBSettings {
     );
      
     // Register our setting in the "atgbp_settings" settings section
-    register_setting( 'atgbp_settings', 'atgpb_default_button_label' );
     register_setting( 'atgbp_settings', 'atgpb_default_button_text' );
+    register_setting( 'atgbp_settings', 'atgpb_default_button_class' );
   }
 
   /*
@@ -69,19 +67,19 @@ class ATGPBSettings {
   }
    
   /*
-   * Callback function for our example setting
+   * Callback function for our example text
    */ 
-  public function atgpb_default_button_label_callback() {
-    $setting = esc_attr( get_option( 'atgpb_default_button_label' ) );
-    echo "<input type='text' name='atgpb_default_button_label' value='$setting' />";
+  public function atgpb_default_button_text_callback() {
+    $text = esc_attr( get_option( 'atgpb_default_button_text' ) );
+    echo "<input type='text' name='atgpb_default_button_text' value='$text' />";
   }
 
   /*
-   * Callback function for our example setting
+   * Callback function for our example class
    */ 
   public function atgpb_default_button_class_callback() {
-    $setting = esc_attr( get_option( 'atgpb_default_button_text' ) );
-    echo "<input type='text' name='atgpb_default_button_text' value='$setting' />";
+    $class = esc_attr( get_option( 'atgpb_default_button_class' ) );
+    echo "<input type='text' name='atgpb_default_button_class' value='$class' />";
   }
 
 }

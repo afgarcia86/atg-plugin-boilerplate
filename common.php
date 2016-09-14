@@ -5,9 +5,9 @@ if ( ! class_exists( 'ATGPB' ) ) {
 }
 
 /**
- * Class GFCommon
+ * Class ATGPBCommon
  *
- * Includes common methods accessed throughout Gravity Forms and add-ons.
+ * Includes common methods accessed throughout ATG Plugin Boilerplate.
  */
 class ATGPBCommon {
 
@@ -51,5 +51,5 @@ class ATGPBCommon {
     </div> <!-- / wrap -->
   <?php
   }
-  
+
 }
